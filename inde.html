@@ -9,6 +9,32 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400;1,700&family=Montserrat:wght@300;400;500&display=swap"
         rel="stylesheet" />
     <style>
+        /* FIX LAYOUT MOBILE - TARUH DI PALING ATAS <style> */
+        html,
+        body {
+            overflow-x: hidden !important;
+            /* Kunci geser horizontal */
+            width: 100% !important;
+            position: relative;
+            margin: 0;
+            padding: 0;
+            touch-action: pan-y;
+            /* Cuma izinkan scroll atas-bawah */
+        }
+
+        * {
+            box-sizing: border-box;
+            /* Biar elemen nggak 'offside' keluar layar */
+        }
+
+        /* Biar container playlist lo nggak maksa lebar */
+        .song-list-container,
+        .plist-wrap,
+        .letter-card {
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
         :root {
             --dp: #b5466b;
             --mid: #e07090;
@@ -1293,8 +1319,8 @@
         <div class="plist-wrap reveal d2">
             <div class="plist-head"><span>#</span><span>Title</span><span style="text-align:right">Time</span></div>
             <div class="sr on" data-i="0"><span class="sr-num">♪</span>
-                <div class="sr-info"><span class="sr-title">Cowboy in LA</span><span class="sr-artist">LANY</span></div><span
-                    class="sr-dur">3:33</span>
+                <div class="sr-info"><span class="sr-title">Cowboy in LA</span><span class="sr-artist">LANY</span></div>
+                <span class="sr-dur">3:33</span>
             </div>
             <div class="sr" data-i="1"><span class="sr-num">2</span>
                 <div class="sr-info"><span class="sr-title">Best Part</span><span class="sr-artist">Daniel Caesar ft.
@@ -1433,7 +1459,7 @@
         const mpToggle = document.getElementById('mpToggle');
         const mpIcon = document.getElementById('mpIcon');
         const miniPlayer = document.getElementById('miniPlayer');
-        
+
         // Sync Player UI
         const pbFill = document.getElementById('pbFill');
         const pbTime = document.getElementById('pbTime');
@@ -1450,19 +1476,19 @@
             mpDur.textContent = s.dur;
             mpBar.style.width = '0%';
             mpCur.textContent = '0:00';
-            
+
             // Update UI list
             document.querySelectorAll('.sr').forEach((r, j) => {
                 r.classList.toggle('on', j === i);
                 r.querySelector('.sr-num').textContent = j === i ? '♪' : j + 1;
             });
-            
-            if (s.file) { 
-                audio.src = s.file; 
-                if (autoplay) { audio.play().catch(() => { }); } 
-            } else { 
-                audio.src = ''; 
-                setPlaying(false); 
+
+            if (s.file) {
+                audio.src = s.file;
+                if (autoplay) { audio.play().catch(() => { }); }
+            } else {
+                audio.src = '';
+                setPlaying(false);
             }
         }
 
@@ -1495,10 +1521,10 @@
 
         mpPlay.addEventListener('click', togglePlay);
         playBtn.addEventListener('click', togglePlay);
-        
+
         mpPrev.addEventListener('click', () => loadSong((curIdx - 1 + songs.length) % songs.length, true));
         mpNext.addEventListener('click', () => loadSong((curIdx + 1) % songs.length, true));
-        
+
         document.getElementById('mpBarWrap').addEventListener('click', e => {
             if (!audio.duration) return;
             const r = e.currentTarget.getBoundingClientRect();
@@ -1522,14 +1548,14 @@
         const lyricText = document.getElementById('lyricText');
         const lyricNote = document.getElementById('lyricNote');
         const lyricClose = document.getElementById('lyricClose');
-        
+
         function showLyric(i) {
             const s = songs[i];
             lyricSong.textContent = s.title; lyricArtist.textContent = s.artist;
             lyricText.textContent = '"' + s.lyric + '"'; lyricNote.textContent = s.note;
             popup.classList.add('show');
         }
-        
+
         lyricClose.addEventListener('click', () => popup.classList.remove('show'));
         popup.addEventListener('click', e => { if (e.target === popup) popup.classList.remove('show'); });
 
@@ -1542,4 +1568,5 @@
         });
     </script>
 </body>
+
 </html>
